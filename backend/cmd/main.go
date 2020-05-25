@@ -20,7 +20,7 @@ func main() {
 	// Open a Pebble DB to persist games to disk.
 	dir := os.Getenv("PEBBLE_DIR")
 	if dir == "" {
-		dir = filepath.Join(".", "backend/db")
+		dir = filepath.Join(".", "db")
 	}
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
