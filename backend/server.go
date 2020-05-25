@@ -90,7 +90,7 @@ func (handler *GameHandler) MarshalJSON() ([]byte, error) {
 	return handler.Marshaled, err
 }
 
-// POST create - if exists gets the gamec otherwise creates a game handler with given player count
+// POST create - if exists gets the game otherwise creates a game handler with given player count
 func (server *Server) HandleGetOrCreate(rw http.ResponseWriter, req *http.Request) {
 	var request struct {
 		GameID  string `json:"game_id"`
@@ -133,7 +133,7 @@ func (server *Server) HandlePlace(rw http.ResponseWriter, req *http.Request) {
 	WriteGame(rw, handler)
 }
 
-// POST next-turn - changes turns
+// POST next - changes turns
 func (server *Server) HandleNextTurn(rw http.ResponseWriter, req *http.Request) {
 	var request struct {
 		GameID string `json:"game_id"`
