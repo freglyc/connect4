@@ -22,12 +22,12 @@ func (store *PebbleStore) Restore() (map[string]*Game, error) {
 	defer iter.Close()
 	games := make(map[string]*Game)
 	for _ = iter.First(); iter.Valid(); iter.Next() {
-		var g Game
-		err := json.Unmarshal(iter.Value(), &g)
+		var game Game
+		err := json.Unmarshal(iter.Value(), &game)
 		if err != nil {
 			return nil, fmt.Errorf("unmarshal game: %w", err)
 		}
-		games[g.GameID] = &g
+		games[game.GameID] = &game
 	}
 	if err := iter.Error(); err != nil {
 		return nil, fmt.Errorf("restore iter: %w", err)
