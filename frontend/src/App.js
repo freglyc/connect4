@@ -1,25 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import GamePage from "./Game";
+import HomePage from "./Home";
+import SettingsPage, {Settings} from "./Settings";
+import {addRedux} from "./redux/reducer";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    constructor(props) { super(props); }
+
+    componentDidMount() {
+        let settings = Settings.load()
+        if (settings !== {}) {
+            this.props.setDarkMode(settings.darkMode);
+            this.props.setColorBlind(settings.colorBlind);
+        }
+        if (this.props.gameID) this.props.setPage("GAME");
+    }
+
+    render() {
+        let page = <HomePage/>;
+        if (this.props.page === "HOME") page = <HomePage/>;
+        else if (this.props.page === "GAME") page = <GamePage/>;
+        else if (this.props.page === "SETTINGS") page = <SettingsPage/>;
+        return ( <div>{ page }</div> );
+    }
 }
-export default App;
+
+export default addRedux(App);

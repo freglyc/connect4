@@ -8,3 +8,15 @@
 // - dark mode toggle
 // - color blind mode toggle
 
+import * as React from "react";
+import {addRedux} from "./redux/reducer";
+
+class HomePage extends React.Component {
+    constructor(props) { super(props); }
+
+    render() {
+        return (<div>HOME</div>)
+    }
+}
+
+export default addRedux(HomePage);
