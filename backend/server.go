@@ -2,11 +2,20 @@ package connect4
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"sync"
 	"time"
 )
+
+// Websocket upgrade
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 // Storage system used to save games to disk
 type Store interface {
@@ -16,28 +25,36 @@ type Store interface {
 // Server used to serve HTTP requests
 type Server struct {
 	Server http.Server             // HTTP server
-	Mux    *http.ServeMux          // Allows pattern matching on URL
+	Mux    *mux.Router             // Allows pattern matching on URL
 	Mutex  sync.Mutex              // Allows for server mutex
 	Store  Store                   // Storage system used to store games to disk
 	Games  map[string]*GameHandler // Mapping of gameIDs to current game handlers
-
 }
 
 // Game handler that manages an in progress game
 type GameHandler struct {
-	Game      *Game      // The game being played
-	Store     Store      // Storage system used to store games to disk
-	Mutex     sync.Mutex // Allows for game mutex
-	Marshaled []byte     // Store json
+	Game       *Game      // The game being played
+	Store      Store      // Storage system used to store games to disk
+	Mutex      sync.Mutex // Allows for game mutex
+	Marshaled  []byte     // Store json
+	WebSockets map[*websocket.Conn]bool
+	// Channels or mutex work in this case
+
+	// would need a channel for receiving
+	// Do I actually need a channel for receiveing concurrent requests? Do some research to see wha the standard is and if
+	// I would drop requests if I don't have one. I'm pretty sure I do need one but in what capacity and do I need an
+	// Overall one for the server itself as well
+	// would need a making of websocket.Conn:bool for registering connections
 }
 
 // Create a new game handler
 func NewHandler(game *Game, store Store) *GameHandler {
 	handler := &GameHandler{
-		Game:      game,
-		Store:     store,
-		Mutex:     sync.Mutex{},
-		Marshaled: nil,
+		Game:       game,
+		Store:      store,
+		Mutex:      sync.Mutex{},
+		Marshaled:  nil,
+		WebSockets: make(map[*websocket.Conn]bool),
 	}
 	err := store.Save(handler.Game)
 	if err != nil {
@@ -90,15 +107,19 @@ func (handler *GameHandler) MarshalJSON() ([]byte, error) {
 	return handler.Marshaled, err
 }
 
-// POST create - if exists gets the game otherwise creates a game handler with given player count
+// WS connection - get or create a game and user subscribes to future updates
 func (server *Server) HandleGetOrCreate(rw http.ResponseWriter, req *http.Request) {
+	ws, err := upgrader.Upgrade(rw, req, nil)
+	if err != nil {
+		http.Error(rw, "failed to upgrade", 400)
+		return
+	}
 	var request struct {
 		GameID  string `json:"game_id"`
 		Players int    `json:"players"`
 	}
-	err := json.NewDecoder(req.Body).Decode(&request)
+	err = ws.ReadJSON(&request)
 	if err != nil {
-		http.Error(rw, "Error decoding request body", 400)
 		return
 	}
 	if request.Players < 2 || request.Players > 4 {
@@ -106,7 +127,8 @@ func (server *Server) HandleGetOrCreate(rw http.ResponseWriter, req *http.Reques
 		return
 	}
 	handler := server.GetOrCreateGameHandler(request.GameID, request.Players)
-	WriteGame(rw, handler)
+	handler.WebSockets[ws] = true
+	handler.WriteGame()
 }
 
 // POST place - places a token on a given column
@@ -130,7 +152,8 @@ func (server *Server) HandlePlace(rw http.ResponseWriter, req *http.Request) {
 		http.Error(rw, err.Error(), 400)
 		return
 	}
-	WriteGame(rw, handler)
+	handler.WriteGame()
+	rw.Write([]byte("success"))
 }
 
 // POST next - changes turns
@@ -152,7 +175,8 @@ func (server *Server) HandleNextTurn(rw http.ResponseWriter, req *http.Request) 
 		http.Error(rw, err.Error(), 400)
 		return
 	}
-	WriteGame(rw, handler)
+	handler.WriteGame()
+	rw.Write([]byte("success"))
 }
 
 // POST reset - resets the game to blank
@@ -174,7 +198,8 @@ func (server *Server) HandleReset(rw http.ResponseWriter, req *http.Request) {
 		http.Error(rw, err.Error(), 400)
 		return
 	}
-	WriteGame(rw, handler)
+	handler.WriteGame()
+	rw.Write([]byte("success"))
 }
 
 // Remove old completed and expired games
@@ -196,11 +221,11 @@ func (server *Server) RemoveOldGames() {
 
 // Start the server
 func (server *Server) Start(games map[string]*Game) error {
-	server.Mux = http.NewServeMux()
-	server.Mux.HandleFunc("/create", server.HandleGetOrCreate)
-	server.Mux.HandleFunc("/place", server.HandlePlace)
-	server.Mux.HandleFunc("/next", server.HandleNextTurn)
-	server.Mux.HandleFunc("/reset", server.HandleReset)
+	server.Mux = mux.NewRouter()
+	server.Mux.HandleFunc("/create", server.HandleGetOrCreate) // WEBSOCKET CONNECTION
+	server.Mux.HandleFunc("/place", server.HandlePlace).Methods("POST")
+	server.Mux.HandleFunc("/next", server.HandleNextTurn).Methods("POST")
+	server.Mux.HandleFunc("/reset", server.HandleReset).Methods("POST")
 	server.Games = make(map[string]*GameHandler)
 	server.Server.Handler = http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		server.Mux.ServeHTTP(rw, req)
@@ -221,13 +246,18 @@ func (server *Server) Start(games map[string]*Game) error {
 	return server.Server.ListenAndServe()
 }
 
-// Write a game back to client
-func WriteGame(rw http.ResponseWriter, handler *GameHandler) {
+// Write a game back to connected clients
+func (handler *GameHandler) WriteGame() {
 	data, err := json.Marshal(handler)
 	if err != nil {
-		http.Error(rw, "unable to marshal response: "+err.Error(), 500)
 		return
 	}
-	rw.Header().Set("Content-Type", "application/json")
-	rw.Write(data)
+	// writes to connected clients of game
+	for conn := range handler.WebSockets {
+		err = conn.WriteMessage(websocket.TextMessage, data)
+		if err != nil {
+			conn.Close()
+			delete(handler.WebSockets, conn)
+		}
+	}
 }
