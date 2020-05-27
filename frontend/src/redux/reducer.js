@@ -3,8 +3,9 @@ import {connect} from "react-redux";
 
 const INITIAL_STATE = {
     // site data
-    page: "HOME",       // page the user is currently on
-    gameID: null,       // ID of current game
+    page: "HOME",       // current page
+    gameID: "",         // ID of current game
+    players: "2",         // number of players
     timer: null,        // null if no timer, int representing time per turn otherwise
 
     // settings
@@ -18,55 +19,33 @@ const INITIAL_STATE = {
     winner: "Neutral",  // the game winner
 };
 
-const applySetPage = (state, action) => ({
-    ...state,
-    page: action.page
-});
+// actions
+export const setBoard = (board) => { return { type: 'BOARD_SET', board: board }; };
+export const setTurn = (turn) => { return { type: 'TURN_SET', turn: turn }; };
+export const setWinner = (winner) => { return { type: 'WINNER_SET', winner: winner }; };
 
-const applySetGameID = (state, action) => ({
-    ...state,
-    panel: action.gameID
-});
+// reducers
+const applySetPage = (state, action) => ({ ...state, page: action.page });
+const applySetGameID = (state, action) => ({ ...state, gameID: action.gameID });
+const applySetPlayers = (state, action) => ({ ...state, players: action.players });
+const applySetTimer = (state, action) => ({ ...state, timer: action.timer })
+const applySetDarkMode = (state, action) => ({ ...state, darkMode: action.darkMode });
+const applySetColorBlind = (state, action) => ({ ...state, colorBlind: action.colorBlind });
+const applySetColor = (state, action) => ({ ...state, color: action.color });
+const applySetBoard = (state, action) => ({ ...state, board: action.board });
+const applySetTurn = (state, action) => ({ ...state, turn: action.turn });
+const applySetWinner = (state, action) => ({ ...state, winner: action.winner });
 
-const applySetTimer = (state, action) => ({
-    ...state,
-    timer: action.timer
-})
-
-const applySetDarkMode = (state, action) => ({
-    ...state,
-    darkMode: action.darkMode
-});
-
-const applySetColorBlind = (state, action) => ({
-    ...state,
-    colorBlind: action.colorBlind
-});
-
-const applySetColor = (state, action) => ({
-    ...state,
-    color: action.color
-});
-
-const applySetBoard = (state, action) => ({
-    ...state,
-    board: action.board
-});
-
-const applySetTurn = (state, action) => ({
-    ...state,
-    turn: action.turn
-});
-
-const applySetWinner = (state, action) => ({
-    ...state,
-    winner: action.winner
-});
-
+// reducer
 function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case 'PAGE_SET': { return applySetPage(state, action); }
-        case 'GAMEID_SET': { return applySetGameID(state, action); }
+        case 'GAMEID_SET': {
+            console.log(action.gameID)
+            return applySetGameID(state, action); }
+        case 'PLAYERS_SET': {
+            console.log(action.players)
+            return applySetPlayers(state, action); }
         case 'TIMER_SER': { return applySetTimer(state, action); }
 
         case 'DARKMODE_SET': { return applySetDarkMode(state, action); }
@@ -80,10 +59,7 @@ function reducer(state = INITIAL_STATE, action) {
     }
 }
 
-const rootReducer = combineReducers({
-    connect4State: reducer
-})
-
+const rootReducer = combineReducers({ connect4State: reducer })
 export default rootReducer;
 
 /**
@@ -96,6 +72,7 @@ export function addRedux(component) {
         return {
             page: state.connect4State.page,
             gameID: state.connect4State.gameID,
+            players: state.connect4State.gameID,
             timer: state.connect4State.timer,
 
             darkMode: state.connect4State.darkblue,
@@ -110,6 +87,7 @@ export function addRedux(component) {
     const mapDispatchToProps = (dispatch) => ({
         setPage: (page) => { dispatch({type: 'PAGE_SET', page}); },
         setGameIDe: (gameID) => { dispatch({type: 'GAMEID_SET', gameID}); },
+        setPlayers: (players) => { dispatch({type: 'PLAYERS_SET', players}); },
         setTimer: (timer) => { dispatch({type: 'TIMER_SET', timer}); },
 
         setDarkMode: (darkMode) => { dispatch({type: 'DARKMODE_SET', darkMode}); },
