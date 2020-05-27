@@ -158,7 +158,7 @@ func (server *Server) HandlePlace(rw http.ResponseWriter, req *http.Request) {
 	var err error
 	handler.Update(func(game *Game) bool {
 		err = game.PlaceToken(request.Column)
-		if err != nil {
+		if err == nil {
 			game.NextTurn()
 		}
 		return err == nil

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 
 const INITIAL_STATE = {
     // site data
-    page: "HOME",       // current page
+    page: "HOME",   // current page
     stateID: "",        // current game state ID
     gameID: "",         // ID of current game
     players: 2,         // number of players
@@ -19,11 +19,6 @@ const INITIAL_STATE = {
     turn: "Neutral",    // the current turn color
     winner: "Neutral",  // the game winner
 };
-
-// actions
-export const setBoard = (board) => { return { type: 'BOARD_SET', board: board }; };
-export const setTurn = (turn) => { return { type: 'TURN_SET', turn: turn }; };
-export const setWinner = (winner) => { return { type: 'WINNER_SET', winner: winner }; };
 
 // reducers
 const applySetPage = (state, action) => ({ ...state, page: action.page });
@@ -45,7 +40,7 @@ function reducer(state = INITIAL_STATE, action) {
         case 'STATEID_SET': { return applySetStateID(state, action); }
         case 'GAMEID_SET': { return applySetGameID(state, action); }
         case 'PLAYERS_SET': { return applySetPlayers(state, action); }
-        case 'TIMER_SER': { return applySetTimer(state, action); }
+        case 'TIMER_SET': { return applySetTimer(state, action); }
 
         case 'DARKMODE_SET': { return applySetDarkMode(state, action); }
         case 'COLORBLIND_SET': { return applySetColorBlind(state, action); }
@@ -75,7 +70,7 @@ export function addRedux(component) {
             players: state.connect4State.players,
             timer: state.connect4State.timer,
 
-            darkMode: state.connect4State.darkblue,
+            darkMode: state.connect4State.darkMode,
             colorBlind: state.connect4State.colorBlind,
 
             color: state.connect4State.color,
@@ -87,7 +82,7 @@ export function addRedux(component) {
     const mapDispatchToProps = (dispatch) => ({
         setPage: (page) => { dispatch({type: 'PAGE_SET', page}); },
         setStateID: (stateID) => { dispatch({type: 'StateID_SET', stateID}); },
-        setGameIDe: (gameID) => { dispatch({type: 'GAMEID_SET', gameID}); },
+        setGameID: (gameID) => { dispatch({type: 'GAMEID_SET', gameID}); },
         setPlayers: (players) => { dispatch({type: 'PLAYERS_SET', players}); },
         setTimer: (timer) => { dispatch({type: 'TIMER_SET', timer}); },
 
