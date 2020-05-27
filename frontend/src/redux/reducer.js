@@ -4,9 +4,10 @@ import {connect} from "react-redux";
 const INITIAL_STATE = {
     // site data
     page: "HOME",       // current page
+    stateID: "",        // current game state ID
     gameID: "",         // ID of current game
-    players: "2",         // number of players
-    timer: null,        // null if no timer, int representing time per turn otherwise
+    players: 2,         // number of players
+    timer: false,       // false if no timer, true if timer
 
     // settings
     darkMode: false,    // dark mode activated
@@ -26,6 +27,7 @@ export const setWinner = (winner) => { return { type: 'WINNER_SET', winner: winn
 
 // reducers
 const applySetPage = (state, action) => ({ ...state, page: action.page });
+const applySetStateID = (state, action) => ({ ...state, stateID: action.stateID });
 const applySetGameID = (state, action) => ({ ...state, gameID: action.gameID });
 const applySetPlayers = (state, action) => ({ ...state, players: action.players });
 const applySetTimer = (state, action) => ({ ...state, timer: action.timer })
@@ -40,12 +42,9 @@ const applySetWinner = (state, action) => ({ ...state, winner: action.winner });
 function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case 'PAGE_SET': { return applySetPage(state, action); }
-        case 'GAMEID_SET': {
-            console.log(action.gameID)
-            return applySetGameID(state, action); }
-        case 'PLAYERS_SET': {
-            console.log(action.players)
-            return applySetPlayers(state, action); }
+        case 'STATEID_SET': { return applySetStateID(state, action); }
+        case 'GAMEID_SET': { return applySetGameID(state, action); }
+        case 'PLAYERS_SET': { return applySetPlayers(state, action); }
         case 'TIMER_SER': { return applySetTimer(state, action); }
 
         case 'DARKMODE_SET': { return applySetDarkMode(state, action); }
@@ -71,8 +70,9 @@ export function addRedux(component) {
     function mapStateToProps(state) {
         return {
             page: state.connect4State.page,
+            stateID:  state.connect4State.stateID,
             gameID: state.connect4State.gameID,
-            players: state.connect4State.gameID,
+            players: state.connect4State.players,
             timer: state.connect4State.timer,
 
             darkMode: state.connect4State.darkblue,
@@ -86,6 +86,7 @@ export function addRedux(component) {
     }
     const mapDispatchToProps = (dispatch) => ({
         setPage: (page) => { dispatch({type: 'PAGE_SET', page}); },
+        setStateID: (stateID) => { dispatch({type: 'StateID_SET', stateID}); },
         setGameIDe: (gameID) => { dispatch({type: 'GAMEID_SET', gameID}); },
         setPlayers: (players) => { dispatch({type: 'PLAYERS_SET', players}); },
         setTimer: (timer) => { dispatch({type: 'TIMER_SET', timer}); },

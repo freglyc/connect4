@@ -204,7 +204,6 @@ func (game *Game) PlaceToken(y int) error {
 		if game.GameState.Board[i][y] == Neutral {
 			game.GameState.Board[i][y] = game.GameState.Turn
 			game.CheckWinner()
-			game.NextTurn()
 			return nil
 		}
 	}

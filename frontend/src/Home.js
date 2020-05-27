@@ -9,9 +9,8 @@
 // - color blind mode toggle
 
 import * as React from "react";
-import {addRedux} from "./redux/reducer";
-import {WebSocketContext} from "./WebSocket";
-import {useContext} from "react";
+import {addRedux, setBoard} from "./redux/reducer";
+import axios from 'axios';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -21,14 +20,27 @@ class HomePage extends React.Component {
 
     // Joins a game and opens a websocket for future updates
     handleClick() {
-        let sock = new WebSocket("ws://localhost:8080/create");
-        sock.onopen = () => {
-            sock.send(JSON.stringify({"game_id": this.props.gameID, "players": 2}));
-        }
+        let data = { "game_id": this.props.gameID, "players": this.props.players }
+        axios.post('http://localhost:8080/join', data).then((res) => {
+            let sock = new WebSocket("ws://localhost:8080/subscribe");
+            sock.onopen = () => {
+                sock.send(JSON.stringify({ "game_id": this.props.gameID }));
+            }
 
-        sock.onmessage = (msg) => {
-            console.log(msg.data);
-        }
+            sock.onmessage = (msg) => {
+                let json = JSON.parse(msg.data)
+                if (this.props.stateID !== json.state_id) {
+                    this.props.setStateID(json.state_id);
+                    this.props.setBoard(json.board);
+                    this.props.setTurn(json.turn);
+                    this.props.setWinner(json.winner);
+                }
+            }
+
+            sock.onclose = () => {
+                console.log("SOCKET CLOSED")
+            }
+        })
     }
 
     render() {
@@ -42,13 +54,22 @@ class HomePage extends React.Component {
                 <input autoFocus type="text" value={this.props.gameID}
                        onChange={(e) => this.props.setGameIDe(e.target.value)}/>
                 <button onClick={this.handleClick}>Go</button>
-                <label htmlFor="players">Players:</label>
-                <select name="players" id="players"
-                        onChange={(e) => this.props.setPlayers(e.target.value)}>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
+                <div>
+                    <label htmlFor="players">Players</label>
+                    <select name="players" id="players"
+                            onChange={(e) => this.props.setPlayers(parseInt(e.target.value))}>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div>
+                    Timer
+                    <label className="switch">
+                        <input type="checkbox" onChange={this.props.setTimer(!this.props.timer)}/>
+                        <span className="slider round"/>
+                    </label>
+                </div>
             </div>
         )
     }
