@@ -38,12 +38,13 @@ type GameHandler struct {
 	Mutex      sync.Mutex               // Allows for game mutex
 	Marshaled  []byte                   // Store json
 	WebSockets map[*websocket.Conn]bool // Holds mapping of subscribers
-	Timer      *time.Timer
+	Timer      *time.Timer              // Turn timer that may or may not be enabled
 }
 
 // Starts a game timer that changes player turn on timeout
 func (handler *GameHandler) startTimer() {
-	handler.Timer = time.NewTimer(21 * time.Second)
+	handler.stopTimer()
+	handler.Timer = time.NewTimer(time.Duration(handler.Game.Time+1) * time.Second)
 	go func() {
 		<-handler.Timer.C
 		handler.Mutex.Lock()
@@ -56,8 +57,8 @@ func (handler *GameHandler) startTimer() {
 		}
 		handler.Mutex.Unlock()
 
-		handler.WSWriteGame()
 		handler.startTimer()
+		handler.WSWriteGame()
 	}()
 }
 
@@ -101,7 +102,7 @@ func (server *Server) GetOrCreateGameHandler(gameID string, players int, hasTime
 	handler, ok := server.Games[gameID]
 	if !ok {
 		handler = NewHandler(NewGame(gameID, Options{
-			Players: players, Rows: 9, Columns: 9, Crazy: false, HasTimer: hasTimer,
+			Players: players, Rows: 6, Columns: 7, Crazy: false, HasTimer: hasTimer,
 		}), server.Store)
 		server.Games[gameID] = handler
 	}
@@ -196,7 +197,6 @@ func (server *Server) HandlePlace(rw http.ResponseWriter, req *http.Request) {
 			} else {
 				handler.Game.NextTurn()
 				if handler.Game.Options.HasTimer {
-					handler.stopTimer()
 					handler.startTimer()
 				}
 			}

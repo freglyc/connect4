@@ -89,12 +89,12 @@ func NewGameState(options Options) GameState {
 	// Init teams array
 	var teams = make([]Team, options.Players)
 	teams[0] = Red
-	teams[1] = Blue
+	teams[1] = Yellow
 	if options.Players >= 3 {
 		teams[2] = Green
 	}
 	if options.Players == 4 {
-		teams[3] = Yellow
+		teams[3] = Blue
 	}
 	// Init board
 	var board = make([][]Team, options.Rows)
