@@ -23,7 +23,7 @@ class App extends React.Component {
         // Set game if in one
         if (document.location.pathname !== "/") {
             this.props.setGameID(document.location.pathname.slice(1));
-            let data = { "game_id": this.props.gameID, "players": 2 };
+            let data = {"game_id": this.props.gameID, "players": 2, "timer": false};
             axios.post('http://localhost:8080/join', data).then(_ => {
                 let sock = new WebSocket("ws://localhost:8080/subscribe");
                 sock.onopen = () => {

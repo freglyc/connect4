@@ -64,13 +64,17 @@ type Options struct {
 	Rows    int  `json:"rows"`
 	Columns int  `json:"columns"`
 	Crazy   bool `json:"crazy"`
+
+	HasTimer bool `json:"hasTimer"`
 }
 
 type GameState struct {
-	Teams  []Team   `json:"teams"`
-	Turn   Team     `json:"turn"`
-	Board  [][]Team `json:"board"`
-	Winner Team     `json:"winner"`
+	Teams   []Team   `json:"teams"`
+	Turn    Team     `json:"turn"`
+	Board   [][]Team `json:"board"`
+	Winner  Team     `json:"winner"`
+	Time    int      `json:"time"`
+	Started bool     `json:"started"`
 }
 
 type Game struct {
@@ -99,10 +103,12 @@ func NewGameState(options Options) GameState {
 	}
 	// Init game state
 	state := GameState{
-		Teams:  teams,
-		Turn:   teams[rand.Intn(options.Players)],
-		Board:  board,
-		Winner: Neutral,
+		Teams:   teams,
+		Turn:    teams[rand.Intn(options.Players)],
+		Board:   board,
+		Winner:  Neutral,
+		Time:    20,
+		Started: false,
 	}
 	return state
 }
@@ -203,6 +209,7 @@ func (game *Game) PlaceToken(y int) error {
 	for i := game.Options.Rows - 1; i >= 0; i-- {
 		if game.GameState.Board[i][y] == Neutral {
 			game.GameState.Board[i][y] = game.GameState.Turn
+			game.Started = true
 			game.CheckWinner()
 			return nil
 		}

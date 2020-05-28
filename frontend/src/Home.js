@@ -15,7 +15,7 @@ class HomePage extends React.Component {
         e.preventDefault();
         if (this.props.gameID.includes(" ") || this.props.gameID.length < 3) return
         axios.post('http://localhost:8080/join',
-            {"game_id": this.props.gameID, "players": this.props.players}).then(_ => {
+            {"game_id": this.props.gameID, "players": this.props.players, "timer": this.props.timer}).then(_ => {
                 let sock = new WebSocket("ws://localhost:8080/subscribe");
                 sock.onopen = () => { sock.send(JSON.stringify({ "game_id": this.props.gameID })); }
 

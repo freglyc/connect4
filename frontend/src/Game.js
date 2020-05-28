@@ -30,6 +30,9 @@ class GamePage extends React.Component {
                 <div className="board">
                     {this.props.board}
                 </div>
+                <div>
+                    {this.props.turn}
+                </div>
             </div>
         )
     }
