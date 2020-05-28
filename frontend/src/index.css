@@ -1,16 +1,37 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --background: white;
+  --red: #EB2222;
+  --blue: #3B6AEE;
+  --gray: #7F7F7F;
+  --dark: #272727;
+  --black: black;
+}
+[data-theme="dark"] {
+  --background: #272727;
+  --gray: white;
+  --dark: white;
+  --black: white;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html {
+  font-family: Raleway, sans-serif;
+  font-size: 20px;
 }
+
+body {
+  background: var(--background);
+}
+
+html, header, body, h1, h2, h3, p, div {
+  padding: 0;
+  margin: 0;
+}
+
+select:focus {outline:0;}
+
+button:focus {outline:0;}
+
+input:focus {outline: var(--blue) dashed 0.1em;}
 
 
 .switch {
@@ -33,7 +54,9 @@ code {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--dark);
+  /*background-color: var(--background);*/
+  /*border: 1px solid var(--dark);*/
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -45,13 +68,15 @@ code {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  /*background-color: var(--blue);*/
+  background-color: var(--background);
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: var(--blue);
+  border: none;
 }
 
 input:focus + .slider {
@@ -62,6 +87,7 @@ input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+  background-color: white;
 }
 
 /* Rounded sliders */
@@ -71,4 +97,195 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+
+/* CSS */
+.title-txt {
+  font-size: 2em;
+  font-weight: 900;
+}
+
+.standard-txt {
+  font-size: 1em;
+}
+
+.small-txt {
+  font-size: 0.6666em;
+}
+
+.lighter-txt {
+  font-weight: lighter;
+}
+
+.bolder-txt {
+  font-weight: bolder;
+}
+
+.boldest-txt {
+  font-weight: 900;
+}
+
+.small-padding-top {
+  padding-top: 10px;
+}
+
+.medium-padding-top {
+  padding-top: 20px;
+}
+
+.large-padding-top{
+  padding-top: 40px;
+}
+
+.largest-padding-top {
+  padding-top: 60px;
+}
+
+.small-padding-right {
+  padding-right: 10px;
+}
+
+.medium-padding-right {
+  padding-right: 20px;
+}
+
+.small-padding-bot {
+  padding-bottom: 10px;
+}
+
+.medium-padding-bot {
+  padding-bottom: 20px;
+}
+
+.large-padding-bot{
+  padding-bottom: 40px;
+}
+
+.largest-padding-bot {
+  padding-bottom: 60px;
+}
+
+.red {
+  color: var(--red);
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.gray {
+  color: var(--gray);
+}
+
+.black {
+  color: var(--black);
+}
+
+.dark {
+  color: var(--dark);
+}
+
+.flexbox {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-center {
+  align-items: center;
+}
+
+.flex-self-end {
+  align-self: flex-end;
+}
+
+.flex-self-start {
+  align-self: flex-start;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.bottom {
+  bottom: 2em;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.exit {
+  cursor: pointer;
+  font-size: 20px;
+  top: 2em;
+  right: 2em;
+  line-height: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: none;
+  background: none;
+}
+
+.exit:before {
+  content: '\00d7';
+  font-size: 40px;
+  color: var(--dark);
+  font-weight: 900;
+  font-family: Arial, sans-serif;
+}
+
+.input {
+  font-size: 1.5em;
+  font-weight: 300;
+  width: 85%;
+  padding: 0.5em;
+  color: var(--black);
+  border: 1px solid var(--gray);
+  background: var(--background);
+}
+
+.goBtn {
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bolder;
+  width: 15%;
+  color: white;
+  background: var(--blue);
+  border: none;
+}
+
+.select {
+  border: 1px solid var(--gray);
+  color: var(--dark);
+  background: var(--background);
+  height: 2em;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.remove-hyperlink, .remove-hyperlink:link, .remove-hyperlink:visited, .remove-hyperlink:hover, .remove-hyperlink:active {
+  text-decoration: none;
+}
+
+
+.gear {
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
 }

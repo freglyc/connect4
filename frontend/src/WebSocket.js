@@ -1,7 +1,4 @@
 // import React, { createContext } from 'react';
-// import { useDispatch } from 'react-redux';
-// import {setBoard, setTurn, setWinner} from "./redux/reducer";
-// import SockJS from "sockjs-client";
 //
 // const WebSocketContext = createContext(null)
 // export { WebSocketContext }
@@ -10,17 +7,20 @@
 //     let sock;
 //     let ws;
 //
-//     const dispatch = useDispatch();
+//     // const dispatch = useDispatch();
 //
-//     const sendGetOrCreate = (gameID, players) => {
-//         const payload = {
-//             game_id: gameID,
-//             players: players
-//         }
-//         sock.send(payload);
+//     const connect = () => {
+//         console.log(children.props.gameID);
 //     }
+//     // const sendGetOrCreate = (gameID, players) => {
+//     //     const payload = {
+//     //         game_id: gameID,
+//     //         players: players
+//     //     }
+//     //     sock.send(payload);
+//     // }
 //
-//     if (!sock) {
+//     // if (!sock) {
 //         // create new websocket
 //         // sock = new WebSocket("ws://localhost:8080/create");
 //
@@ -42,10 +42,9 @@
 //         // // logs that websocket closed
 //         // sock.onclose = () => { console.log("SOCKET CLOSED"); }
 //         //
-//         // ws = {
-//         //     sock: sock,
-//         //     sendGetOrCreate
-//         // }
+//     ws = {
+//         sock: sock,
+//         connect
 //     }
 //
 //     return (

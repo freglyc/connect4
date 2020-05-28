@@ -10,7 +10,12 @@ class App extends React.Component {
         super(props);
         // Load settings
         let settings = Settings.load();
-        if (settings.darkMode) { this.props.setDarkMode(settings.darkMode); }
+        if (settings.darkMode) {
+            this.props.setDarkMode(settings.darkMode);
+            document.body.setAttribute('data-theme', 'dark');
+        } else {
+            document.body.removeAttribute('data-theme')
+        }
         if (settings.colorBlind) { this.props.setColorBlind(settings.colorBlind); }
     }
 
