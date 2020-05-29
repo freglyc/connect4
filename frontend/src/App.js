@@ -1,3 +1,5 @@
+// Connect4 App Page
+
 import * as React from "react";
 import GamePage from "./Game";
 import HomePage from "./Home";
@@ -13,9 +15,8 @@ class App extends React.Component {
         if (settings.darkMode) {
             this.props.setDarkMode(settings.darkMode);
             document.body.setAttribute('data-theme', 'dark');
-        } else {
-            document.body.removeAttribute('data-theme')
-        }
+        } else document.body.removeAttribute('data-theme')
+
         if (settings.colorBlind) { this.props.setColorBlind(settings.colorBlind); }
     }
 
@@ -26,16 +27,18 @@ class App extends React.Component {
             let data = {"game_id": this.props.gameID, "players": 2, "timer": false};
             axios.post('http://localhost:8080/join', data).then(_ => {
                 let sock = new WebSocket("ws://localhost:8080/subscribe");
-                sock.onopen = () => {
-                    sock.send(JSON.stringify({ "game_id": this.props.gameID }));
-                }
+                sock.onopen = () => { sock.send(JSON.stringify({ "game_id": this.props.gameID })); }
                 sock.onmessage = (msg) => {
                     let json = JSON.parse(msg.data)
                     if (this.props.stateID !== json.state_id) {
                         this.props.setStateID(json.state_id);
                         this.props.setBoard(json.board);
                         this.props.setTurn(json.turn);
+                        this.props.setTeams(json.teams);
                         this.props.setWinner(json.winner);
+                        this.props.setTimer(json.has_timer);
+                        this.props.setTime(json.cur_time);
+                        this.props.setStarted(json.started);
                     }
                 }
                 sock.onclose = () => {}

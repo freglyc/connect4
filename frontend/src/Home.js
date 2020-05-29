@@ -18,17 +18,19 @@ class HomePage extends React.Component {
             {"game_id": this.props.gameID, "players": this.props.players, "timer": this.props.timer}).then(_ => {
                 let sock = new WebSocket("ws://localhost:8080/subscribe");
                 sock.onopen = () => { sock.send(JSON.stringify({ "game_id": this.props.gameID })); }
-
                 sock.onmessage = (msg) => {
                     let json = JSON.parse(msg.data)
                     if (this.props.stateID !== json.state_id) {
                         this.props.setStateID(json.state_id);
                         this.props.setBoard(json.board);
                         this.props.setTurn(json.turn);
+                        this.props.setTeams(json.teams);
                         this.props.setWinner(json.winner);
+                        this.props.setTimer(json.has_timer);
+                        this.props.setTime(json.time);
+                        this.props.setStarted(json.started);
                     }
                 }
-
                 sock.onclose = () => {}
             });
         this.props.setPage("GAME");

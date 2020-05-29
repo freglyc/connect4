@@ -2,7 +2,11 @@
   --background: white;
   --red: #EB2222;
   --blue: #3B6AEE;
+  --yellow: #FFD700;
+  --green: #59D547;
   --gray: #7F7F7F;
+  --lightest-gray: #EEEEEE;
+  --light-gray: #DDDDDD;
   --dark: #272727;
   --black: black;
 }
@@ -10,6 +14,8 @@
   --background: #272727;
   --gray: white;
   --dark: white;
+  --lightest-gray: white;
+  --light-gray: white;
   --black: white;
 }
 
@@ -110,6 +116,10 @@ input:checked + .slider:before {
   font-size: 1em;
 }
 
+.smallest-txt {
+  font-size: 0.5em;
+}
+
 .small-txt {
   font-size: 0.6666em;
 }
@@ -124,6 +134,14 @@ input:checked + .slider:before {
 
 .boldest-txt {
   font-weight: 900;
+}
+
+.small-padding {
+  padding: 10px;
+}
+
+.small-margin-top {
+  margin-top: 10px;
 }
 
 .small-padding-top {
@@ -170,8 +188,16 @@ input:checked + .slider:before {
   color: var(--red);
 }
 
+.yellow {
+  color: var(--yellow)
+}
+
 .blue {
   color: var(--blue);
+}
+
+.green {
+  color: var(--green);
 }
 
 .gray {
@@ -222,8 +248,21 @@ input:checked + .slider:before {
   width: 100%;
 }
 
+.three-quarter-width {
+  width: 75%;
+}
+
 .half-width {
   width: 50%;
+}
+
+.test-width {
+  width: 40%;
+}
+
+
+.quarter-width {
+  width: 25%;
 }
 
 .exit {
@@ -288,4 +327,103 @@ input:checked + .slider:before {
   border: none;
   background: none;
   cursor: pointer;
+}
+
+/* COLOR CHANGE RADIO */
+.color-input input[type=radio] {
+  opacity: 0;
+  width: 0;
+  position: absolute;
+}
+
+.color-input label {
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px;
+  text-align: center;
+  width: 80px;
+  height: 20px;
+}
+
+.red-input-background input[type="radio"]:checked + label {
+  color: white;
+  background-color: var(--red);
+}
+
+.yellow-input-background input[type="radio"]:checked + label {
+  color: white;
+  background-color: var(--yellow);
+}
+
+.green-input-background input[type="radio"]:checked + label {
+  color: white;
+  background-color: var(--green);
+}
+
+.blue-input-background input[type="radio"]:checked + label {
+  color: white;
+  background-color: var(--blue);
+}
+
+.red-border {
+  border: 2px solid var(--red);
+}
+
+.green-border {
+  border: 2px solid var(--green);
+}
+
+.blue-border {
+  border: 2px solid var(--blue);
+}
+
+.yellow-border {
+  border: 2px solid var(--yellow);
+}
+
+.board {
+  width: 100%;
+}
+
+.tile {
+  cursor: pointer;
+  width: 100%;
+  height: calc(10vw * 0.55);
+  border: none;
+  background: var(--blue);
+  padding: 0;
+}
+
+.tile div {
+  margin: 0 auto;
+  width: 90%;
+  height: 90%;
+  border-radius: 100%;
+}
+
+.neutral-background {
+  background: var(--background);
+}
+
+.blue-background {
+  background: var(--blue);
+}
+
+.red-background {
+  background: var(--red);
+}
+
+.yellow-background {
+  background: var(--yellow);
+}
+
+.green-background {
+  background: var(--green);
+}
+
+.resetBtn {
+  cursor: pointer;
+  padding: 0.5em 2em;
+  border: 1px solid var(--light-gray);
+  background: var(--lightest-gray);
 }

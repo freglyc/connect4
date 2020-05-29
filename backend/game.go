@@ -65,7 +65,7 @@ type Options struct {
 	Columns int  `json:"columns"`
 	Crazy   bool `json:"crazy"`
 
-	HasTimer bool `json:"hasTimer"`
+	HasTimer bool `json:"has_timer"`
 }
 
 type GameState struct {
@@ -74,6 +74,7 @@ type GameState struct {
 	Board   [][]Team `json:"board"`
 	Winner  Team     `json:"winner"`
 	Time    int      `json:"time"`
+	CurTime int      `json:"cur_time"`
 	Started bool     `json:"started"`
 }
 
@@ -108,6 +109,7 @@ func NewGameState(options Options) GameState {
 		Board:   board,
 		Winner:  Neutral,
 		Time:    20,
+		CurTime: 20,
 		Started: false,
 	}
 	return state
@@ -148,8 +150,8 @@ func (game *Game) CheckWinner() {
 		}
 	}
 	// Check negative diagonal
-	for i := 0; i < game.Options.Rows-3; i++ {
-		for j := 3; j < game.Options.Columns; j++ {
+	for i := 3; i < game.Options.Rows; i++ {
+		for j := 0; j < game.Options.Columns-3; j++ {
 			if winner := game.NegativeDiagonalCheck(i, j); winner != Neutral {
 				game.GameState.Winner = winner
 			}

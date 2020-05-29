@@ -39,12 +39,15 @@ type GameHandler struct {
 	Marshaled  []byte                   // Store json
 	WebSockets map[*websocket.Conn]bool // Holds mapping of subscribers
 	Timer      *time.Timer              // Turn timer that may or may not be enabled
+	End        time.Time                // Timer end time
 }
 
 // Starts a game timer that changes player turn on timeout
-func (handler *GameHandler) startTimer() {
-	handler.stopTimer()
-	handler.Timer = time.NewTimer(time.Duration(handler.Game.Time+1) * time.Second)
+func (handler *GameHandler) StartTimer() {
+	handler.StopTimer()
+	handler.Game.CurTime = handler.Game.Time
+	handler.Timer = time.NewTimer(time.Duration(handler.Game.Time+2) * time.Second)
+	handler.End = time.Now().Add(time.Duration(handler.Game.Time) * time.Second)
 	go func() {
 		<-handler.Timer.C
 		handler.Mutex.Lock()
@@ -57,16 +60,20 @@ func (handler *GameHandler) startTimer() {
 		}
 		handler.Mutex.Unlock()
 
-		handler.startTimer()
+		handler.StartTimer()
 		handler.WSWriteGame()
 	}()
 }
 
 // Stops the game timer
-func (handler *GameHandler) stopTimer() {
+func (handler *GameHandler) StopTimer() {
 	if handler.Timer != nil {
 		handler.Timer.Stop()
 	}
+}
+
+func (handler *GameHandler) TimeRemaining() time.Duration {
+	return handler.End.Sub(time.Now())
 }
 
 // Create a new game handler
@@ -137,6 +144,15 @@ func (server *Server) HandleSubscribe(rw http.ResponseWriter, req *http.Request)
 	err = ws.ReadJSON(&request)
 	handler := server.GetOrCreateGameHandler(request.GameID, 2, false)
 	handler.WebSockets[ws] = true
+
+	// Update current time left in turn if timer enabled
+	if handler.Game.Options.HasTimer {
+		handler.Mutex.Lock()
+		handler.Game.CurTime = int(handler.TimeRemaining().Seconds())
+		handler.Save()
+		handler.Mutex.Unlock()
+	}
+
 	data, err := json.Marshal(handler)
 	if err != nil {
 		log.Println("FAILED TO MARSHAL")
@@ -193,11 +209,12 @@ func (server *Server) HandlePlace(rw http.ResponseWriter, req *http.Request) {
 		if err == nil {
 			// If winner stop timer, else continue
 			if handler.Game.Winner.String() != "Neutral" {
-				handler.stopTimer()
+				handler.StopTimer()
 			} else {
 				handler.Game.NextTurn()
 				if handler.Game.Options.HasTimer {
-					handler.startTimer()
+					handler.Game.CurTime = handler.Game.Time
+					handler.StartTimer()
 				}
 			}
 			handler.Save()
@@ -226,7 +243,7 @@ func (server *Server) HandleReset(rw http.ResponseWriter, req *http.Request) {
 	handler := server.GetOrCreateGameHandler(request.GameID, 2, false)
 
 	handler.Mutex.Lock()
-	handler.stopTimer()
+	handler.StopTimer()
 	handler.Game.Reset()
 	handler.Save()
 	handler.Mutex.Unlock()
