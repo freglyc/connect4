@@ -4,8 +4,29 @@ import * as React from "react";
 import {addRedux} from "./redux/reducer";
 import axios from 'axios';
 import {Timer} from "./Timer";
+import defaultFavicon from "./assets/defaultFavicon.ico"
+import redFavicon from "./assets/redFavicon.ico"
+import blueFavicon from "./assets/blueFavicon.ico"
+import yellowFavicon from "./assets/yellowFavicon.ico"
+import greenFavicon from "./assets/greenFavicon.ico"
+
 
 class GamePage extends React.Component {
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.winner !== "Neutral") {
+            document.getElementById("favicon").setAttribute("href", defaultFavicon);
+        } else {
+            let favi;
+            if (this.props.turn === "Red") favi = redFavicon;
+            else if (this.props.turn === "Yellow") favi = yellowFavicon;
+            else if (this.props.turn === "Green") favi = greenFavicon;
+            else if (this.props.turn === "Blue") favi = blueFavicon;
+            else favi = defaultFavicon;
+            document.getElementById("favicon").setAttribute("href", favi);
+        }
+    }
+
     /**
      * POST place - send a place token request
      * @param column - the column to place the token
@@ -22,7 +43,7 @@ class GamePage extends React.Component {
             <div className="flexbox flex-column flex-center full-height">
                 <div className="flexbox flex-column flex-center test-width">
                     <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>CONNECT<span className="blue">4</span></a></h1>
-                    <p className="flex-self-start small-txt lighter-txt dark medium-padding-top">share this link with friends <a className="dark" href={"https://" +  window.location.host + "/" + this.props.gameID}>{"https://" +  window.location.host + "/" + this.props.gameID}</a></p>
+                    <p className="flex-self-start small-txt lighter-txt dark medium-padding-top">share this link with friends: <a className="dark" href={"https://" +  window.location.host + "/" + this.props.gameID}>{"https://" +  window.location.host + "/" + this.props.gameID}</a></p>
                     <hr className="full-width dark"/>
                     <div className="full-width">
                         <div className="flexbox space-between full-width small-padding-top">
@@ -70,7 +91,7 @@ class GamePage extends React.Component {
                                 this.props.started && this.props.timer ?
                                     <Timer time={this.props.time} currentTime={this.props.currentTime} turn={this.props.turn} winner={this.props.winner}/> :
                                     this.props.timer ?
-                                        <div className="standard-txt boldest-txt dark">TIME: {this.props.time}</div> :
+                                        <div className="standard-txt boldest-txt dark">time: {this.props.time}</div> :
                                         <div/>
                             }
                             <div className="flexbox flex-center">

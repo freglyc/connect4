@@ -41,6 +41,6 @@ export class Timer extends React.Component{
     componentWillUnmount() { clearInterval(this.timer); }
 
     render() {
-        return (<div className="standard-txt boldest-txt dark">TIME: {this.state.currentTime}</div>)
+        return (<div className="standard-txt boldest-txt dark">time: {this.state.currentTime}</div>)
     }
 }
