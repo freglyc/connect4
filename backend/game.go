@@ -64,13 +64,18 @@ type Options struct {
 	Rows    int  `json:"rows"`
 	Columns int  `json:"columns"`
 	Crazy   bool `json:"crazy"`
+
+	HasTimer bool `json:"has_timer"`
 }
 
 type GameState struct {
-	Teams  []Team   `json:"teams"`
-	Turn   Team     `json:"turn"`
-	Board  [][]Team `json:"board"`
-	Winner Team     `json:"winner"`
+	Teams   []Team   `json:"teams"`
+	Turn    Team     `json:"turn"`
+	Board   [][]Team `json:"board"`
+	Winner  Team     `json:"winner"`
+	Time    int      `json:"time"`
+	CurTime int      `json:"cur_time"`
+	Started bool     `json:"started"`
 }
 
 type Game struct {
@@ -85,12 +90,12 @@ func NewGameState(options Options) GameState {
 	// Init teams array
 	var teams = make([]Team, options.Players)
 	teams[0] = Red
-	teams[1] = Blue
+	teams[1] = Yellow
 	if options.Players >= 3 {
 		teams[2] = Green
 	}
 	if options.Players == 4 {
-		teams[3] = Yellow
+		teams[3] = Blue
 	}
 	// Init board
 	var board = make([][]Team, options.Rows)
@@ -99,10 +104,13 @@ func NewGameState(options Options) GameState {
 	}
 	// Init game state
 	state := GameState{
-		Teams:  teams,
-		Turn:   teams[rand.Intn(options.Players)],
-		Board:  board,
-		Winner: Neutral,
+		Teams:   teams,
+		Turn:    teams[rand.Intn(options.Players)],
+		Board:   board,
+		Winner:  Neutral,
+		Time:    20,
+		CurTime: 20,
+		Started: false,
 	}
 	return state
 }
@@ -142,8 +150,8 @@ func (game *Game) CheckWinner() {
 		}
 	}
 	// Check negative diagonal
-	for i := 0; i < game.Options.Rows-3; i++ {
-		for j := 3; j < game.Options.Columns; j++ {
+	for i := 3; i < game.Options.Rows; i++ {
+		for j := 0; j < game.Options.Columns-3; j++ {
 			if winner := game.NegativeDiagonalCheck(i, j); winner != Neutral {
 				game.GameState.Winner = winner
 			}
@@ -203,8 +211,8 @@ func (game *Game) PlaceToken(y int) error {
 	for i := game.Options.Rows - 1; i >= 0; i-- {
 		if game.GameState.Board[i][y] == Neutral {
 			game.GameState.Board[i][y] = game.GameState.Turn
+			game.Started = true
 			game.CheckWinner()
-			game.NextTurn()
 			return nil
 		}
 	}
