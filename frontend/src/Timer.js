@@ -5,20 +5,25 @@ import * as React from "react";
 export class Timer extends React.Component{
     constructor(props) {
         super(props);
-        this.state = { time: props.time }
+        this.state = { currentTime: props.currentTime }
         this.timer = null;
         this.updated = false;
     }
 
     tick() {
-        if (this.updated === true) {
+        if (this.props.winner !== "Neutral") {
+            clearInterval(this.timer)
             this.setState({
-                time: this.props.time
+                currentTime: this.props.time
+            });
+        } else if (this.updated === true) {
+            this.setState({
+                currentTime: this.props.currentTime
             });
             this.updated = false;
-        } else if (this.state.time > 0) {
+        } else if (this.state.currentTime > 0) {
             this.setState({
-                time: this.state.time - 1
+                currentTime: this.state.currentTime - 1
             });
         }
     }
@@ -36,6 +41,6 @@ export class Timer extends React.Component{
     componentWillUnmount() { clearInterval(this.timer); }
 
     render() {
-        return (<div className="standard-txt boldest-txt dark">TIME: {this.state.time}</div>)
+        return (<div className="standard-txt boldest-txt dark">TIME: {this.state.currentTime}</div>)
     }
 }

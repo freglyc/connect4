@@ -8,7 +8,8 @@ const INITIAL_STATE = {
     gameID: "",         // ID of current game
     players: 2,         // number of players
     timer: false,       // false if no timer, true if timer
-    time: -1,           // time left before turn ends
+    currentTime: -1,    // time left before turn ends
+    time: -1,           // time to refresh to after each turn
     started: false,     // whether or not the game has started
 
     // settings
@@ -29,6 +30,7 @@ const applySetStateID = (state, action) => ({ ...state, stateID: action.stateID 
 const applySetGameID = (state, action) => ({ ...state, gameID: action.gameID });
 const applySetPlayers = (state, action) => ({ ...state, players: action.players });
 const applySetTimer = (state, action) => ({ ...state, timer: action.timer });
+const applySetCurrentTime = (state, action) => ({ ...state, currentTime: action.currentTime });
 const applySetTime = (state, action) => ({ ...state, time: action.time });
 const applySetStarted = (state, action) => ({ ...state, started: action.started });
 const applySetDarkMode = (state, action) => ({ ...state, darkMode: action.darkMode });
@@ -47,6 +49,7 @@ function reducer(state = INITIAL_STATE, action) {
         case 'GAMEID_SET': { return applySetGameID(state, action); }
         case 'PLAYERS_SET': { return applySetPlayers(state, action); }
         case 'TIMER_SET': { return applySetTimer(state, action); }
+        case 'CURRENTTIME_SET': { return applySetCurrentTime(state, action); }
         case 'TIME_SET': { return applySetTime(state, action); }
         case 'STARTED_SET': { return applySetStarted(state, action); }
 
@@ -78,6 +81,7 @@ export function addRedux(component) {
             gameID: state.connect4State.gameID,
             players: state.connect4State.players,
             timer: state.connect4State.timer,
+            currentTime: state.connect4State.currentTime,
             time: state.connect4State.time,
             started: state.connect4State.started,
 
@@ -97,6 +101,7 @@ export function addRedux(component) {
         setGameID: (gameID) => { dispatch({type: 'GAMEID_SET', gameID}); },
         setPlayers: (players) => { dispatch({type: 'PLAYERS_SET', players}); },
         setTimer: (timer) => { dispatch({type: 'TIMER_SET', timer}); },
+        setCurrentTime: (currentTime) => { dispatch({type: 'CURRENTTIME_SET', currentTime}); },
         setTime: (time) => { dispatch({type: 'TIME_SET', time}); },
         setStarted: (started) => { dispatch({type: 'STARTED_SET', started}); },
 

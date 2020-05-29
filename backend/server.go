@@ -148,7 +148,12 @@ func (server *Server) HandleSubscribe(rw http.ResponseWriter, req *http.Request)
 	// Update current time left in turn if timer enabled
 	if handler.Game.Options.HasTimer {
 		handler.Mutex.Lock()
-		handler.Game.CurTime = int(handler.TimeRemaining().Seconds())
+		currentTime := int(handler.TimeRemaining().Seconds())
+		if currentTime < 0 {
+			handler.Game.CurTime = handler.Game.Time
+		} else {
+			handler.Game.CurTime = currentTime
+		}
 		handler.Save()
 		handler.Mutex.Unlock()
 	}
@@ -199,6 +204,7 @@ func (server *Server) HandlePlace(rw http.ResponseWriter, req *http.Request) {
 
 	if handler.Game.Winner.String() != "Neutral" {
 		http.Error(rw, "Game already over", 403)
+		return
 	}
 
 	// If your turn

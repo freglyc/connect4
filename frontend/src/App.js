@@ -37,7 +37,8 @@ class App extends React.Component {
                         this.props.setTeams(json.teams);
                         this.props.setWinner(json.winner);
                         this.props.setTimer(json.has_timer);
-                        this.props.setTime(json.cur_time);
+                        this.props.setCurrentTime(json.cur_time);
+                        this.props.setTime(json.time);
                         this.props.setStarted(json.started);
                     }
                 }

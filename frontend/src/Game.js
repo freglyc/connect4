@@ -68,7 +68,7 @@ class GamePage extends React.Component {
                         <div className="flexbox space-between full-width small-padding-top">
                             {
                                 this.props.started && this.props.timer ?
-                                    <Timer time={this.props.time} turn={this.props.turn}/> :
+                                    <Timer time={this.props.time} currentTime={this.props.currentTime} turn={this.props.turn} winner={this.props.winner}/> :
                                     this.props.timer ?
                                         <div className="standard-txt boldest-txt dark">TIME: {this.props.time}</div> :
                                         <div/>
