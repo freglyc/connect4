@@ -39,9 +39,12 @@ class GamePage extends React.Component {
     reset() { axios.post('http://localhost:8080/reset', {"game_id": this.props.gameID}).then(_ => {}) }
 
     render() {
+        let turn = (this.props.winner !== "Neutral") ? this.props.winner.toLocaleLowerCase() : this.props.turn.toLocaleLowerCase()
+        let borders = (this.props.colorBlind) ? "-blind-border" : "-border";
+        let tileBorders = (this.props.colorBlind) ? "-tile-blind-border" : "";
         return (
             <div className="flexbox flex-column flex-center full-height">
-                <div className="flexbox flex-column flex-center test-width">
+                <div className="flexbox flex-column flex-center game-width">
                     <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>CONNECT<span className="blue">4</span></a></h1>
                     <p className="flex-self-start small-txt lighter-txt dark medium-padding-top">share this link with friends: <a className="dark" href={"https://" +  window.location.host + "/" + this.props.gameID}>{"https://" +  window.location.host + "/" + this.props.gameID}</a></p>
                     <hr className="full-width dark"/>
@@ -49,19 +52,19 @@ class GamePage extends React.Component {
                         <div className="flexbox space-between full-width small-padding-top">
                             <div className="flexbox">
                                 { this.props.teams.map((team) =>
-                                    <div key={team + "-div"} className={"color-input " + team.toLowerCase() + "-input-background"}>
+                                    <div key={team + "-div"} className={"color-input " + team.toLowerCase() + "-input-background " + team.toLowerCase() + borders }>
                                         <input key={team + "-input"} id={team} onClick={e => {
                                         e.stopPropagation();
                                         this.props.setColor(e.target.value)
                                         }} name="color" type="radio" value={team}/>
                                         <label key={team + "-label"} htmlFor={team}
-                                               className={team.toLowerCase() + " boldest-txt small-txt " + team.toLowerCase() + "-border"}>
+                                               className={team.toLowerCase() + " boldest-txt small-txt"}>
                                             {team.toLowerCase()}</label>
                                     </div>
                                 ) }
                             </div>
                             <div className="flexbox">
-                                <p className={this.props.turn.toLocaleLowerCase() + " medium-txt boldest-txt flex-self-end"}>{
+                                <p className={turn + " standard-txt boldest-txt flex-self-end"}>{
                                     this.props.winner !== "Neutral" ?
                                         this.props.winner.toLowerCase() + " wins!" :
                                         this.props.turn.toLowerCase() + " turn"
@@ -69,7 +72,7 @@ class GamePage extends React.Component {
                             </div>
                         </div>
                         <div className="flexbox flex-column flex-center small-margin-top blue-background small-padding">
-                            <div className="board">{
+                            <div className="full-width">{
                                 this.props.board.map((row, idx1) => {
                                     return (
                                         <div key={"rpw-" + idx1} className="full-width flexbox space-between">
@@ -78,7 +81,7 @@ class GamePage extends React.Component {
                                                     e.preventDefault();
                                                     this.place(idx2);
                                                 }}>
-                                                    <div className={tile.toLowerCase() + "-background"}/>
+                                                    <div className={tile.toLowerCase() + "-background " + tile.toLowerCase() + tileBorders}/>
                                                 </button>
                                             })}
                                         </div>
@@ -111,7 +114,7 @@ class GamePage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="absolute bottom">
+                <div className="absolute bottom dev">
                     <p className="small-txt lighter-txt gray">Created by <a className="gray" href="https://www.cfregly.com">Chris Fregly</a></p>
                 </div>
             </div>

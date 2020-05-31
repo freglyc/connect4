@@ -200,6 +200,10 @@ input:checked + .slider:before {
   color: var(--green);
 }
 
+.none {
+  color: var(--dark);
+}
+
 .gray {
   color: var(--gray);
 }
@@ -256,7 +260,7 @@ input:checked + .slider:before {
   width: 50%;
 }
 
-.test-width {
+.game-width {
   width: 40%;
 }
 
@@ -321,7 +325,6 @@ input:checked + .slider:before {
   text-decoration: none;
 }
 
-
 .gear {
   font-size: 20px;
   border: none;
@@ -365,24 +368,69 @@ input:checked + .slider:before {
   background-color: var(--blue);
 }
 
-.red-border {
+.red-border label{
   border: 2px solid var(--red);
 }
 
-.green-border {
+.red-blind-border label {
+  border: 3px dashed var(--red);
+}
+
+.red-blind-border input[type="radio"]:checked + label {
+  border-color: var(--dark);
+}
+
+.green-border label{
   border: 2px solid var(--green);
 }
 
-.blue-border {
+.green-blind-border label {
+  border: 3px inset var(--green);
+}
+
+.green-blind-border input[type="radio"]:checked + label {
+  border-color: var(--dark);
+}
+
+.blue-border label{
   border: 2px solid var(--blue);
 }
 
-.yellow-border {
+.blue-blind-border label {
+  border: 3px solid var(--dark);
+}
+
+.blue-blind-border input[type="radio"]:checked + label {
+  border-color: var(--dark);
+}
+
+
+.yellow-border label{
   border: 2px solid var(--yellow);
 }
 
-.board {
-  width: 100%;
+.yellow-blind-border label {
+  border: 3px double var(--yellow);
+}
+
+.yellow-blind-border input[type="radio"]:checked + label {
+  border-color: var(--dark);
+}
+
+.red-tile-blind-border {
+  border: 3px dashed var(--dark);
+}
+
+.yellow-tile-blind-border {
+  border: 3px double var(--dark);
+}
+
+.green-tile-blind-border {
+  border: 3px inset var(--dark);
+}
+
+.blue-tile-blind-border {
+  border: 3px solid var(--dark);
 }
 
 .tile {
@@ -426,4 +474,49 @@ input:checked + .slider:before {
   padding: 0.5em 2em;
   border: 1px solid var(--light-gray);
   background: var(--lightest-gray);
+}
+
+/* BREAKPOINTS */
+@media(max-width: 1000px){
+  .title-txt {
+    font-size: 2em;
+    font-weight: 900;
+  }
+
+  .smallest-txt {
+    font-size: 0.3333em;
+  }
+
+  .small-txt {
+    font-size: 0.5em;
+  }
+
+  .standard-txt {
+    font-size: 0.6666em;
+  }
+
+  .color-input label {
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px;
+    text-align: center;
+    width: 40px;
+    height: 10px;
+  }
+}
+
+@media(max-width: 600px){
+  .game-width {
+    width: 65%;
+  }
+
+  .tile {
+    height: calc(10vw * 0.9);
+  }
+}
+
+@media(max-height: 700px) and (min-width: 400px) {
+  .dev {
+    display: none;
+  }
 }

@@ -16,6 +16,7 @@ const (
 	Blue
 	Green
 	Yellow
+	None
 )
 
 func (team Team) String() string {
@@ -28,6 +29,8 @@ func (team Team) String() string {
 		return "Green"
 	case Yellow:
 		return "Yellow"
+	case None:
+		return "None"
 	default:
 		return "Neutral"
 	}
@@ -48,6 +51,8 @@ func (team *Team) UnmarshalJSON(b []byte) error {
 		*team = Green
 	case "Yellow":
 		*team = Yellow
+	case "None":
+		*team = None
 	default:
 		*team = Neutral
 	}
@@ -156,6 +161,20 @@ func (game *Game) CheckWinner() {
 				game.GameState.Winner = winner
 			}
 		}
+	}
+
+	// Check if board is full and no one won
+	hasNeutral := false
+	for i := 0; i < game.Options.Rows; i++ {
+		for j := 0; j < game.Options.Columns; j++ {
+			if game.Board[i][j] == Neutral {
+				hasNeutral = true
+			}
+		}
+	}
+	if !hasNeutral {
+		game.Winner = None
+		return
 	}
 }
 
