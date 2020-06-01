@@ -13,7 +13,7 @@ import (
 )
 
 const expiryDur = -24 * time.Hour
-const listenAddr = ":8080"
+var listenAddr = ":" + os.Getenv("PORT")
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
