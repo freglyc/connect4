@@ -6,6 +6,7 @@ import HomePage from "./Home";
 import SettingsPage, {Settings} from "./Settings";
 import {addRedux} from "./redux/reducer";
 import axios from "axios";
+import {server} from "./Network";
 
 class App extends React.Component {
     constructor(props) {
@@ -25,8 +26,8 @@ class App extends React.Component {
         if (document.location.pathname !== "/") {
             this.props.setGameID(document.location.pathname.slice(1));
             let data = {"game_id": this.props.gameID, "players": 2, "timer": false};
-            axios.post('http://localhost:8080/join', data).then(_ => {
-                let sock = new WebSocket("ws://localhost:8080/subscribe");
+            axios.post('https://' + server + '/join', data).then(_ => {
+                let sock = new WebSocket('wss://' + server + '/subscribe');
                 sock.onopen = () => { sock.send(JSON.stringify({ "game_id": this.props.gameID })); }
                 sock.onmessage = (msg) => {
                     let json = JSON.parse(msg.data)

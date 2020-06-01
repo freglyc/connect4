@@ -1,0 +1,1 @@
+export const server = "fregly-connect4.herokuapp.com";

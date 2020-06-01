@@ -9,6 +9,7 @@ import redFavicon from "./assets/redFavicon.ico"
 import blueFavicon from "./assets/blueFavicon.ico"
 import yellowFavicon from "./assets/yellowFavicon.ico"
 import greenFavicon from "./assets/greenFavicon.ico"
+import {server} from "./Network";
 
 
 class GamePage extends React.Component {
@@ -31,12 +32,12 @@ class GamePage extends React.Component {
      * POST place - send a place token request
      * @param column - the column to place the token
      */
-    place(column) { axios.post('http://localhost:8080/place', {"game_id": this.props.gameID, "color": this.props.color, "column": column}).then(_ => {}) }
+    place(column) { axios.post('https://' + server + '/place', {"game_id": this.props.gameID, "color": this.props.color, "column": column}).then(_ => {}) }
 
     /**
      * POST reset - send a reset request
      */
-    reset() { axios.post('http://localhost:8080/reset', {"game_id": this.props.gameID}).then(_ => {}) }
+    reset() { axios.post('https://' + server + '/reset', {"game_id": this.props.gameID}).then(_ => {}) }
 
     render() {
         let turn = (this.props.winner !== "Neutral") ? this.props.winner.toLocaleLowerCase() : this.props.turn.toLocaleLowerCase()

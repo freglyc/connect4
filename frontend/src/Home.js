@@ -3,6 +3,7 @@
 import * as React from "react";
 import {addRedux} from "./redux/reducer";
 import axios from 'axios';
+import {server} from "./Network";
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -14,9 +15,9 @@ class HomePage extends React.Component {
     handleClick(e) {
         e.preventDefault();
         if (this.props.gameID.includes(" ") || this.props.gameID.length < 3) return
-        axios.post('http://localhost:8080/join',
+        axios.post('https://' + server + '/join',
             {"game_id": this.props.gameID, "players": this.props.players, "timer": this.props.timer}).then(_ => {
-                let sock = new WebSocket("ws://localhost:8080/subscribe");
+                let sock = new WebSocket('wss://' + server + '/subscribe');
                 sock.onopen = () => { sock.send(JSON.stringify({ "game_id": this.props.gameID })); }
                 sock.onmessage = (msg) => {
                     let json = JSON.parse(msg.data)
