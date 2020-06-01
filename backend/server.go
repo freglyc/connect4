@@ -284,7 +284,7 @@ func (server *Server) Start(games map[string]*Game) error {
 	server.Mux.HandleFunc("/reset", server.HandleReset).Methods("POST")
 	server.Games = make(map[string]*GameHandler)
 	server.Server.Handler = http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		rw.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		rw.Header().Set("Access-Control-Allow-Origin", "*")
 		rw.Header().Set("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS")
 		rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Auth-Token, Access-Control-Allow-Headers, Authorization")
 		if req.Method == "OPTIONS" {
