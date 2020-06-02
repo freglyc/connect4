@@ -47,7 +47,7 @@ class GamePage extends React.Component {
             <div className="flexbox flex-column flex-center full-height">
                 <div className="flexbox flex-column flex-center game-width">
                     <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>CONNECT<span className="blue">4</span></a></h1>
-                    <p className="flex-self-start small-txt lighter-txt dark medium-padding-top">share this link with friends: <a className="dark" href={"https://" +  window.location.host + "/" + this.props.gameID}>{"https://" +  window.location.host + "/" + this.props.gameID}</a></p>
+                    <p className="flex-self-start small-txt lighter-txt dark medium-padding-top">Share this link with friends: <a className="dark" href={"https://" +  window.location.host + "/" + this.props.gameID}>{"https://" +  window.location.host + "/" + this.props.gameID}</a></p>
                     <hr className="full-width dark"/>
                     <div className="full-width">
                         <div className="flexbox space-between full-width small-padding-top">
@@ -116,7 +116,7 @@ class GamePage extends React.Component {
                     </div>
                 </div>
                 <div className="absolute bottom dev">
-                    <p className="small-txt lighter-txt gray">Created by <a className="gray" href="https://www.cfregly.com">Chris Fregly</a></p>
+                    <p className="small-txt lighter-txt gray">Keep the dev <a target="_blank" rel="noopener noreferrer" className="gray" href="https://www.buymeacoffee.com/cfregly">caffeinated</a></p>
                 </div>
             </div>
         )

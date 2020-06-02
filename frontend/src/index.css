@@ -520,3 +520,9 @@ input:checked + .slider:before {
     display: none;
   }
 }
+
+@media(max-width: 425px) {
+  .half-width {
+    width: 80%;
+  }
+}
