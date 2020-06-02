@@ -52,7 +52,7 @@ class SettingsPage extends React.Component {
                     </div>
                 </div>
                 <div className="absolute bottom">
-                    <p className="small-txt lighter-txt gray">Keep the dev <a target="_blank" rel="noopener noreferrer" className="gray" href="https://www.buymeacoffee.com/cfregly">caffeinated</a></p>
+                    <p className="small-txt lighter-txt gray">Keep the developer <a target="_blank" rel="noopener noreferrer" className="gray" href="https://www.buymeacoffee.com/cfregly">caffeinated</a></p>
                 </div>
             </div>
         )
