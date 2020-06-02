@@ -45,6 +45,7 @@ class App extends React.Component {
                 }
                 sock.onclose = () => {}
             })
+            this.props.setJoinedGame(true);
             this.props.setPage("GAME");
         }
     }

@@ -5,6 +5,7 @@ import {adjectives, nouns} from "./words";
 const INITIAL_STATE = {
     // site data
     page: "HOME",       // current page
+    joinedGame: false,     // whether a game is joined
     stateID: "",        // current game state ID
     gameID: adjectives[Math.floor(Math.random() * 50)] + "-" + nouns[Math.floor(Math.random() * 50)], // ID of current game
 
@@ -28,6 +29,7 @@ const INITIAL_STATE = {
 
 // reducers
 const applySetPage = (state, action) => ({ ...state, page: action.page });
+const applySetJoinedGamw = (state, action) => ({ ...state, joinedGame: action.joinedGame });
 const applySetStateID = (state, action) => ({ ...state, stateID: action.stateID });
 const applySetGameID = (state, action) => ({ ...state, gameID: action.gameID });
 const applySetPlayers = (state, action) => ({ ...state, players: action.players });
@@ -47,6 +49,7 @@ const applySetWinner = (state, action) => ({ ...state, winner: action.winner });
 function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case 'PAGE_SET': { return applySetPage(state, action); }
+        case 'JOINEDGAME_SET': { return applySetJoinedGamw(state, action) }
         case 'STATEID_SET': { return applySetStateID(state, action); }
         case 'GAMEID_SET': { return applySetGameID(state, action); }
         case 'PLAYERS_SET': { return applySetPlayers(state, action); }
@@ -79,6 +82,7 @@ export function addRedux(component) {
     function mapStateToProps(state) {
         return {
             page: state.connect4State.page,
+            joinedGame: state.connect4State.joinedGame,
             stateID:  state.connect4State.stateID,
             gameID: state.connect4State.gameID,
             players: state.connect4State.players,
@@ -99,6 +103,7 @@ export function addRedux(component) {
     }
     const mapDispatchToProps = (dispatch) => ({
         setPage: (page) => { dispatch({type: 'PAGE_SET', page}); },
+        setJoinedGame: (joinedGame) => { dispatch({type: 'JOINEDGAME_SET', joinedGame}) },
         setStateID: (stateID) => { dispatch({type: 'StateID_SET', stateID}); },
         setGameID: (gameID) => { dispatch({type: 'GAMEID_SET', gameID}); },
         setPlayers: (players) => { dispatch({type: 'PLAYERS_SET', players}); },

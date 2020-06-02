@@ -54,7 +54,7 @@ class GamePage extends React.Component {
                             <div className="flexbox">
                                 { this.props.teams.map((team) =>
                                     <div key={team + "-div"} className={"color-input " + team.toLowerCase() + "-input-background " + team.toLowerCase() + borders }>
-                                        <input key={team + "-input"} id={team} onClick={e => {
+                                        <input checked={this.props.color === team} key={team + "-input"} id={team} onClick={e => {
                                         e.stopPropagation();
                                         this.props.setColor(e.target.value)
                                         }} name="color" type="radio" value={team}/>

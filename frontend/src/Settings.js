@@ -9,7 +9,7 @@ class SettingsPage extends React.Component {
             <div className="flexbox flex-column flex-center full-height">
                 <button className="absolute exit" onClick={(e) => {
                     e.preventDefault();
-                    this.props.setPage(this.props.gameID ? "GAME" : "HOME")
+                    this.props.setPage(this.props.joinedGame ? "GAME" : "HOME")
                 }}/>
                 <div className="flexbox flex-column flex-center half-width">
                     <div className="flexbox flex-column flex-center">

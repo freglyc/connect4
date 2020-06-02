@@ -35,6 +35,7 @@ class HomePage extends React.Component {
                 }
                 sock.onclose = () => {}
             });
+        this.props.setJoinedGame(true);
         this.props.setPage("GAME");
         window.history.pushState(null, '', '/' + this.props.gameID);
     }
