@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
 import {connect} from "react-redux";
+import {adjectives, nouns} from "./words";
 
 const INITIAL_STATE = {
     // site data
     page: "HOME",       // current page
     stateID: "",        // current game state ID
-    gameID: "",         // ID of current game
+    gameID: adjectives[Math.floor(Math.random() * 50)] + "-" + nouns[Math.floor(Math.random() * 50)], // ID of current game
+
     players: 2,         // number of players
     timer: false,       // false if no timer, true if timer
     currentTime: -1,    // time left before turn ends
