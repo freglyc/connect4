@@ -1,6 +1,11 @@
 # Connect4
 
-Implementation of connect4 for the web. Frontend written with React. Backend written in go.
+Implementation of 2-3 player connect4 for the web. Games are sharable and are played on one or more devices. 
+
+View a live verion at [connect4.cfregly.com](https://connect4.cfregly.com).
+
+[game]: screenshot.png
+![alt text][game]
 
 ### Run Frontend
 ```
@@ -14,4 +19,4 @@ cd backend
 go run cmd/main.go
 ```
 
-Backend based off of jbowens' [codenames](https://github.com/jbowens/codenames).
+Backend based partially off of jbowens' [codenames](https://github.com/jbowens/codenames).
