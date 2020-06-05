@@ -32,12 +32,18 @@ class GamePage extends React.Component {
      * POST place - send a place token request
      * @param column - the column to place the token
      */
-    place(column) { axios.post('https://' + server + '/place', {"game_id": this.props.gameID, "color": this.props.color, "column": column}).then(_ => {}) }
+    place(column) {
+        if (this.props.timeout) return
+        axios.post('https://' + server + '/place', {"game_id": this.props.gameID, "color": this.props.color, "column": column}).then(_ => {})
+    }
 
     /**
      * POST reset - send a reset request
      */
-    reset() { axios.post('https://' + server + '/reset', {"game_id": this.props.gameID}).then(_ => {}) }
+    reset() {
+        if (this.props.timeout) return
+        axios.post('https://' + server + '/reset', {"game_id": this.props.gameID}).then(_ => {})
+    }
 
     render() {
         let turn = (this.props.winner !== "Neutral") ? this.props.winner.toLocaleLowerCase() : this.props.turn.toLocaleLowerCase()
@@ -45,6 +51,9 @@ class GamePage extends React.Component {
         let tileBorders = (this.props.colorBlind) ? "-tile-blind-border" : "";
         return (
             <div className="flexbox flex-column flex-center full-height">
+                { this.props.timeout ? <div className="banner standard-txt flexbox flex-center flex-column full-width">
+                    Connection timeout. Please refresh the page.
+                </div> : null }
                 <div className="flexbox flex-column flex-center game-width">
                     <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>CONNECT<span className="blue">4</span></a></h1>
                     <p className="flex-self-start small-txt lighter-txt dark medium-padding-top">Share this link with friends: <a className="dark" href={"https://" +  window.location.host + "/" + this.props.gameID}>{"https://" +  window.location.host + "/" + this.props.gameID}</a></p>
@@ -54,7 +63,7 @@ class GamePage extends React.Component {
                             <div className="flexbox">
                                 { this.props.teams.map((team) =>
                                     <div key={team + "-div"} className={"color-input " + team.toLowerCase() + "-input-background " + team.toLowerCase() + borders }>
-                                        <input checked={this.props.color === team} key={team + "-input"} id={team} onClick={e => {
+                                        <input defaultChecked={this.props.color === team} key={team + "-input"} id={team} onClick={e => {
                                         e.stopPropagation();
                                         this.props.setColor(e.target.value)
                                         }} name="color" type="radio" value={team}/>

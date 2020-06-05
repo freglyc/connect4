@@ -476,6 +476,12 @@ input:checked + .slider:before {
   background: var(--lightest-gray);
 }
 
+.banner {
+  color: white;
+  background: #f44336;
+  padding: 10px;
+}
+
 /* BREAKPOINTS */
 @media(max-width: 1000px){
   .title-txt {

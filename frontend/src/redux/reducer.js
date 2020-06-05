@@ -21,10 +21,12 @@ const INITIAL_STATE = {
 
     // game data
     color: "Neutral",   // the color of the player
-    board: [],        // the game board
+    board: [],          // the game board
     turn: "Neutral",    // the current turn color
     teams: [],          // team colors
     winner: "Neutral",  // the game winner
+
+    timeout: false,     // true disables all requests as timed out
 };
 
 // reducers
@@ -44,6 +46,7 @@ const applySetBoard = (state, action) => ({ ...state, board: action.board });
 const applySetTurn = (state, action) => ({ ...state, turn: action.turn });
 const applySetTeams = (state, action) => ({ ...state, teams: action.teams })
 const applySetWinner = (state, action) => ({ ...state, winner: action.winner });
+const applySetTimeout = (state, action) => ({ ...state, timeout: action.timeout });
 
 // reducer
 function reducer(state = INITIAL_STATE, action) {
@@ -66,6 +69,8 @@ function reducer(state = INITIAL_STATE, action) {
         case 'TURN_SET': { return applySetTurn(state, action); }
         case 'TEAMS_SET': { return applySetTeams(state, action); }
         case 'WINNER_SET': { return applySetWinner(state, action); }
+
+        case 'TIMEOUT_SET': { return applySetTimeout(state, action); }
         default: { return state; }
     }
 }
@@ -99,6 +104,8 @@ export function addRedux(component) {
             turn: state.connect4State.turn,
             teams: state.connect4State.teams,
             winner: state.connect4State.winner,
+
+            timeout: state.connect4State.timeout,
         };
     }
     const mapDispatchToProps = (dispatch) => ({
@@ -119,7 +126,9 @@ export function addRedux(component) {
         setBoard: (board) => { dispatch({type: 'BOARD_SET', board}); },
         setTurn: (turn) => { dispatch({type: 'TURN_SET', turn}); },
         setTeams: (teams) => { dispatch({type: 'TEAMS_SET', teams}); },
-        setWinner: (winner) => { dispatch({type: 'WINNER_SET', winner}); }
+        setWinner: (winner) => { dispatch({type: 'WINNER_SET', winner}); },
+
+        setTimeout: (timeout) => { dispatch({type: 'TIMEOUT_SET', timeout}); }
     });
     return connect(mapStateToProps, mapDispatchToProps)(component);
 }
