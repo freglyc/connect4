@@ -78,7 +78,6 @@ class HomePage extends React.Component {
                                     onChange={(e) => this.props.setPlayers(parseInt(e.target.value))}>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
-                                {/*<option value="4">4</option>*/}
                             </select>
                         </div>
                         <div className="flexbox flex-center">

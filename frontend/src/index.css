@@ -61,8 +61,6 @@ input:focus {outline: var(--blue) dashed 0.1em;}
   right: 0;
   bottom: 0;
   background-color: var(--dark);
-  /*background-color: var(--background);*/
-  /*border: 1px solid var(--dark);*/
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -74,7 +72,6 @@ input:focus {outline: var(--blue) dashed 0.1em;}
   width: 26px;
   left: 4px;
   bottom: 4px;
-  /*background-color: var(--blue);*/
   background-color: var(--background);
   -webkit-transition: .4s;
   transition: .4s;
@@ -519,6 +516,10 @@ input:checked + .slider:before {
   .tile {
     height: calc(10vw * 0.9);
   }
+
+  .red-tile-blind-border, .yellow-tile-blind-border, .green-tile-blind-border, .blue-tile-blind-border {
+    border-width: 2px;
+  }
 }
 
 @media(max-height: 700px) and (min-width: 400px) {
@@ -530,5 +531,25 @@ input:checked + .slider:before {
 @media(max-width: 425px) {
   .half-width {
     width: 80%;
+  }
+
+  .lighter-txt {
+    font-weight: normal;
+  }
+
+  .small-padding-right {
+    padding-right: 2px;
+  }
+
+  .exit {
+    right: 1em;
+  }
+
+  .red-tile-blind-border, .yellow-tile-blind-border, .green-tile-blind-border, .blue-tile-blind-border {
+    border-width: 1px;
+  }
+
+  .goBtn {
+    width: 30%;
   }
 }

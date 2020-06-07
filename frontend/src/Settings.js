@@ -20,7 +20,7 @@ class SettingsPage extends React.Component {
                         <div className="flexbox space-between full-width">
                             <div>
                                 <h2 className="standard-txt boldest-txt dark">DARK MODE</h2>
-                                <p className="small-txt gray">darken the mood and may also conserve battery life</p>
+                                <p className="small-txt gray">darken the mood and may conserve battery life</p>
                             </div>
                             <label className="switch">
                                 <input type="checkbox" defaultChecked={this.props.darkMode} onChange={(e) => {
