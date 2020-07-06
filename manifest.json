@@ -1,6 +1,6 @@
 {
-  "short_name": "connect4",
-  "name": "connect4",
+  "short_name": "Connect4",
+  "name": "Connect4 - Play Connect4 Online",
   "icons": [
     {
       "src": "defaultFavicon.ico",
